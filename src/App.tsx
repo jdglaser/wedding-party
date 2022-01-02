@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import logo from './logo.svg'
 import './App.css'
 
@@ -24,6 +24,8 @@ function App() {
   
   const person = searchParams.get("awesome-person") as Groomsman
 
+  const bottomRef = useRef<null | HTMLDivElement>(null);;
+
   if (!person || !groomsmen.includes(person)) {
     return (
       <div>
@@ -32,9 +34,18 @@ function App() {
     );
   }
 
+  const scrollToBottom = () => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [step])
+
   return (
     <div className="App">
-      {step}
       <div className='content'>
         <h1>Hi {capitalize(person)},</h1>
         <div className={`step-holder ${step >= 5 ? "hide" : ""}`}>
@@ -61,6 +72,7 @@ function App() {
             <p>
               ...
             </p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia modi aut quia ab adipisci beatae labore odio veniam. Doloribus quos delectus facilis tempore quo cupiditate ullam, eveniet suscipit natus. Aspernatur!</p>
           </div>
           <div className={`accordion ${step >= 4 ? "show" : ""}`}>
             <p>
@@ -68,6 +80,7 @@ function App() {
             </p>
             <button onClick={() => setStep(5)}>Yes!</button>
           </div>
+          <div ref={bottomRef} />
         </div>
       </div>
     </div>
