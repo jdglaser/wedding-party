@@ -21,7 +21,7 @@ export const handler: Handler = async (event, context) => {
     Message: {
       Subject: {
         Charset: "UTF-8", 
-        Data: "Hi!"
+        Data: "It's Party Time!"
       }, 
       Body: {
         Html: {
