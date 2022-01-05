@@ -4,6 +4,7 @@ import './App.css'
 
 import {useSearchParams} from "react-router-dom"
 import ConfettiExplosion from '@reonomy/react-confetti-explosion';
+import Confetti from 'react-dom-confetti';
 import $ from 'jquery';
 
 const groomsmen = ["evan", "caleb", "justin", "steven", "jimmy", "max", "keegan"] as const;
@@ -40,13 +41,13 @@ function App() {
   const bottomRef = useRef<null | HTMLDivElement>(null);
 
   async function sendEmailNotification() {
-    turnOnConfetti();
     console.log("Sending email")
     return await fetch(`/.netlify/functions/send-email?person=${person}`, {
       method: 'GET'
     }).then(async response => {
       const status = response.status;
       setEmailStatus(status === 200 ? "success" : "failure");
+      turnOnConfetti();
     })
   }
 
@@ -76,7 +77,6 @@ function App() {
     setShowConfetti(true);
     const confettiTimer = setTimeout(() => {
       setShowConfetti(false);
-      clearTimeout(confettiTimer)
     }, 5000);
   }
 
@@ -109,6 +109,11 @@ function App() {
 
   return (
     <>
+      {showConfetti && (
+        <div style={{position: "absolute", top: "25%", left: "25%"}}>
+          <ConfettiExplosion duration={showConfetti ? 5000 : 0}/>
+        </div>
+      )}
       {emailStatus === null ? null : (
           <div className='result'>
             <h2>🎉 WOO HOO! 🎉</h2>
@@ -122,11 +127,6 @@ function App() {
       {emailStatus === null ? (
         <>
           <h1>Hi {capitalize(person)},</h1>
-          {showConfetti && (
-            <div style={{position: "absolute", margin: "25% 50%"}}>
-              <ConfettiExplosion duration={5000} />
-            </div>
-          )}
           <div className='header'>
             <h2>I have a very important question for you...</h2>
             <div className={`countdown ${step >= 5 && countdown !== -1 ? "" : "hide"}`}>
