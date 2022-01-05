@@ -83,7 +83,17 @@ function App() {
             {countdown === -1 && <ConfettiExplosion />}
         </div>
         <div className={`question ${countdown === -1 ? "" : "hide"}`}>
-          <span className='question-text'>🎉Will you be a groomsman in my wedding?🎉</span><br />
+          <div className='question-text'>
+            <div className='question-text-conf'>
+              <div>🎉</div><div>🎉</div>
+            </div>
+            <div>
+              Will you be my groomsman?
+            </div>
+            <div className='question-text-conf'>
+              <div>🎉</div><div>🎉</div>
+            </div>
+          </div>
           <button style={{maxWidth: "100px", width: "100px"}}>Yes</button><br />
           <button style={{maxWidth: "100px", width: "100px"}} onClick={() => handleClick()}>No</button><br />
           <div className="alert hide">❌ I'm sorry, that answer isn't allowed, try a different one ❌</div>

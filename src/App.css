@@ -132,6 +132,13 @@ button::after {
 .question-text {
   font-size: 3rem;
   font-weight: bolder;
+  display: flex;
+  flex-direction: column;
+}
+
+.question-text-conf {
+  display: flex;
+  justify-content: space-between;
 }
 
 .question.hide {
