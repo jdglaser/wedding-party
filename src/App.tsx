@@ -6,11 +6,23 @@ import {useSearchParams} from "react-router-dom"
 import ConfettiExplosion from '@reonomy/react-confetti-explosion';
 import $ from 'jquery';
 
-const groomsmen = ["evan", "caleb", "justin", "steven", "jimmy"] as const;
+const groomsmen = ["evan", "caleb", "justin", "steven", "jimmy", "max", "keegan"] as const;
 type Groomsman = typeof groomsmen[number];
 
 function capitalize(val: string) {
   return val[0].toUpperCase() + val.slice(1);
+}
+
+function resolveRole(person: Groomsman) {
+  if (person === "justin") {
+    return "my best man";
+  }
+
+  if (person === "max" || person === "keegan") {
+    return "an usher in our wedding"
+  }
+
+  return "my groomsman"
 }
 
 function App() {
@@ -21,7 +33,16 @@ function App() {
   
   const person = searchParams.get("awesome-person") as Groomsman
 
-  const bottomRef = useRef<null | HTMLDivElement>(null);;
+  const bottomRef = useRef<null | HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch('/.netlify/functions/hello-world', {
+      method: 'GET'
+    }).then(async response => {
+      const body = await response.json()
+      console.log(body)
+    })
+  }, [])
 
   if (!person || !groomsmen.includes(person)) {
     return (
@@ -88,7 +109,7 @@ function App() {
               <div>🎉</div><div>🎉</div>
             </div>
             <div>
-              Will you be my groomsman?
+              Will you be {resolveRole(person)}?
             </div>
             <div className='question-text-conf'>
               <div>🎉</div><div>🎉</div>
