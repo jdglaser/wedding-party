@@ -7,7 +7,13 @@ function capitalize(val: string) {
 
 export const handler: Handler = async (event, context) => {
   const {person} = event.queryStringParameters;
-  const client = new SESClient({ region: "us-east-2" });
+  const client = new SESClient({
+    region: "us-east-2", 
+    credentials: {
+      accessKeyId: process.env.MY_AWS_ACCESS_KEY_ID, 
+      secretAccessKey: process.env.MY_AWS_SECRET_ACCESS_KEY
+    }
+  });
 
   const params: SendEmailCommandInput = {
     Source: "robo.jarred@gmail.com",
