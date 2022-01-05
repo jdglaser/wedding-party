@@ -35,6 +35,7 @@ function App() {
   const [countdown, setCountdown] = useState<number>(5);
   const [emailStatus, setEmailStatus] = useState<EmailStatus>(null);
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
   
   const person = searchParams.get("awesome-person") as Groomsman
 
@@ -74,10 +75,14 @@ function App() {
   }, [step])
 
   function turnOnConfetti() {
+    if (timer) {
+      clearTimeout(timer);
+    }
     setShowConfetti(true);
     const confettiTimer = setTimeout(() => {
       setShowConfetti(false);
     }, 5000);
+    setTimer(confettiTimer);
   }
 
   useEffect(() => {
@@ -111,7 +116,7 @@ function App() {
     <>
       {showConfetti && (
         <div style={{position: "absolute", top: "25%", left: "25%"}}>
-          <ConfettiExplosion duration={showConfetti ? 5000 : 0}/>
+          <ConfettiExplosion duration={5000}/>
         </div>
       )}
       {emailStatus === null ? null : (
