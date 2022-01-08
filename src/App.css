@@ -60,6 +60,12 @@ button::after {
   transition: all 0.3s;
 }
 
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .content {
   padding: 40px;
   max-width: fit-content;

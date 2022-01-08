@@ -6,6 +6,7 @@ import {useSearchParams} from "react-router-dom"
 import ConfettiExplosion from '@reonomy/react-confetti-explosion';
 import Confetti from 'react-dom-confetti';
 import $ from 'jquery';
+import BeatLoader from "react-spinners/BeatLoader";
 
 const groomsmen = ["evan", "caleb", "justin", "steven", "jimmy", "max", "keegan"] as const;
 type Groomsman = typeof groomsmen[number];
@@ -36,6 +37,7 @@ function App() {
   const [emailStatus, setEmailStatus] = useState<EmailStatus>(null);
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   
   const person = searchParams.get("awesome-person") as Groomsman
 
@@ -43,12 +45,14 @@ function App() {
 
   async function sendEmailNotification() {
     console.log("Sending email")
+    setLoading(true);
     return await fetch(`/.netlify/functions/send-email?person=${person}`, {
       method: 'GET'
     }).then(async response => {
       const status = response.status;
       setEmailStatus(status === 200 ? "success" : "failure");
       turnOnConfetti();
+      setLoading(false);
     })
   }
 
@@ -149,9 +153,24 @@ function App() {
                  <div>🎉</div><div>🎉</div>
                </div>
               </div>
-              <button style={{maxWidth: "100px", width: "100px"}} onClick={() => sendEmailNotification()}>Yes</button><br />
-              <button style={{maxWidth: "100px", width: "100px"}} onClick={() => handleClick()}>No</button><br />
-              <div className="alert hide">❌ I'm sorry, that answer isn't allowed, try a different one ❌</div>
+              <div style={{display: "flex", gap: "10px", justifyContent: "center", alignItems: "center"}}>
+                <div>
+                  <div>
+                    <button style={{maxWidth: "100px", width: "100px"}} 
+                      onClick={() => sendEmailNotification()}
+                      disabled={loading}>Yes</button><br />
+                    <button style={{maxWidth: "100px", width: "100px"}} 
+                      onClick={() => handleClick()}
+                      disabled={loading}>No</button><br />
+                  </div>
+                </div>
+                <div style={{position: "absolute"}}>
+                  <BeatLoader loading={loading} size={15} />
+                </div>
+              </div>
+              <div className="alert hide">
+                    ❌ I'm sorry, that answer isn't allowed, try a different one ❌
+                  </div>
             </div>
           </div>
           <div className={`step-holder ${step >= 5 ? "hide" : ""}`}>
